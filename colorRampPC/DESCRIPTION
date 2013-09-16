@@ -1,0 +1,10 @@
+Package: colorRampPC
+Type: Package
+Title: Pre-canned color ramps
+Version: 1.0
+Date: 2013-09-15
+Author: Gareth Davies 
+Maintainer: Gareth Davies <grothered@gmail.com>
+Description: Provides pre-canned color ramps for plotting e.g. matrix/raster images. Also has utility functions to help work with them.
+License: GPL-3 
+Suggests: raster
