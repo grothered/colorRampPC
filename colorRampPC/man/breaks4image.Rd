@@ -1,29 +1,41 @@
 \name{breaks4image}
 \alias{breaks4image}
+\alias{resample_colorVec}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-breaks4image
+breaks4image / ressample_colorVec
 }
 \description{
-Compute 'breaks' of a dataset suitable for use in the 'image' function, with various methods
-to distribute colors (e.g. equal-area, linearly, ...)
+Various functions for 'spreading' colors over a domain
+
+breaks4image can compute a vector of 'breaks' suitable for use in the 'image'
+function, with various methods to distribute colors (e.g. equal-area, linearly,
+...). 
 
 This is designed to mimic some functionality of the QGIS 1-band raster plugin, which allows
 users to distribute colors to equalise the image area, or linearly, or by various transformations.
+
+resample_colorVec is something like 'approx' for colors: It takes a color bar
+defined by breaks,colVec, and linearly interpolates along these to return 'n'
+output colors, or alternatively, to return a function which does the
+interpolation
+
 }
 \usage{
 breaks4image(mycolRamp, inputdata, type = "equal-area", minval = NULL, maxval = NULL, power = 0.5, zeroval = 0, zerothresh = 1, ncell = 5e+05)
+
+resample_colorVec(colVec, breaks, n=NULL, return_function=(class(colVec)=='function' & is.null(n)))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{mycolRamp}{
-    A vector of colors (actually, anything with length=number_of_colors will be okay)
+    A (character) vector of colors (actually, anything with length=number_of_colors will work)
 }
   \item{inputdata}{
     Data to distribute colors over. This can be anything with a 'quantile / min / max' method, or a RasterLayer
 }
   \item{type}{
-    How to compute the breaks. See Details
+    How to compute the breaks in 'breaks4image'. See Details
 }
   \item{minval}{
     Force the min of breaks to minval. Computed if NULL
@@ -42,6 +54,19 @@ breaks4image(mycolRamp, inputdata, type = "equal-area", minval = NULL, maxval = 
 }
   \item{ncell}{
     If 'inputdata' is a RasterLayer, at most this many cells are used in 'quantile' computation
+}
+  \item{colVec}{
+    A (character) vector of colors, or a function which takes values in [0-1] and returns vector of colors
+}
+  \item{breaks}{
+    A numeric vector of breaks over which to spread the colors. If colVec is a vector, it must be of length(colVec)+1
+}
+  \item{n}{
+    A number of colors to return
+}
+
+  \item{return_function}{
+    Logical: If true, return a function taking numbers from the range of breaks, and returning a (character) color vector
 }
 }
 \details{
