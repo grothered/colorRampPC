@@ -10,7 +10,7 @@
 }
 \usage{
     plot_colorRampPC(colramps = "", n=300, ...)
-    plot_colorVec(colvec)
+    plot_colorVec(colvec, xleft=0,xright=1,ybottom=0,ytop=1,vertical=FALSE, add=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +22,15 @@
 }
   \item{n}{
     Number of colors to use
+}
+  \item{xleft, xright, ybottom, ytop}{
+    Coordinates of box
+}
+  \item{vertical}{
+    Logical: Draw bars vertically?
+}
+  \item{add}{
+    Logical: Add to existing plot?
 }
   \item{...}{
     Further arguments to colorRampPC

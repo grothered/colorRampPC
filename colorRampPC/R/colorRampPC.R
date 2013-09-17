@@ -167,15 +167,22 @@ plot_colorRampPC<-function(colramps="", n=300, ...){
 }
 
 #################################################################################
-plot_colorVec<-function(colvec){
+plot_colorVec<-function(colvec, xleft=0,xright=1,ybottom=0,ytop=1,vertical=FALSE, add=FALSE){
     # Plot a vector of colors as a bar plot
     n=length(colvec)
-    xleft=seq(0,1,len=n+1)[1:n]
-    xright=seq(0,1,len=n+1)[2:(n+1)]
-    ybottom=rep(0,length(xleft))
-    ytop=rep(1,length(xleft))
-    plot(c(0,1),c(0,1),col=0, axes=FALSE,ann=FALSE)
-    rect(xleft,ybottom,xright,ytop,col=colvec,border=NA)
+    if(!vertical){
+        xl=seq(xleft,xright,len=n+1)[1:n]
+        xr=seq(xleft,xright,len=n+1)[2:(n+1)]
+        ybt=rep(ybottom,length(xl))
+        ytp=rep(ytop,length(xl))
+    }else{
+        xl=rep(xleft,len=n)
+        xr=rep(xright,len=n)
+        ybt=seq(ybottom, ytop,len=n+1)[1:n]
+        ytp=seq(ybottom, ytop,len=n+1)[2:(n+1)]
+    }
+    if(add==FALSE) plot(c(xleft,xright),c(ybottom,ytop),col=0, axes=FALSE,ann=FALSE)
+    rect(xl,ybt,xr,ytp,col=colvec,border=NA)
 }
 
 #################################################################################
