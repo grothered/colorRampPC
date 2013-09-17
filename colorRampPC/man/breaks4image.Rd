@@ -89,7 +89,20 @@ resample_colorVec(colVec, breaks, n=NULL, return_function=(class(colVec)=='funct
     cut, findInterval, colorRamp, colors, heat.colors
 }
 \examples{
-    #FIXME
+
+    # Standard use of filled.contour 
+    mycolVec=terrain.colors(20)
+    data(volcano)
+    filled.contour(volcano,col=mycolVec, main='Standard approach')
+
+    # Compute new breaks which spread the colors evenly over volcano
+    newbreaks=breaks4image(mycolVec, volcano,type='equal-area')
+    filled.contour(volcano, col=mycolVec,levels=newbreaks, main='Equal-area breaks')
+
+    # How to compute colors to be linearly varying along the last colorbar?
+    newcolVec=resample_colorVec(mycolVec, newbreaks,n=100)
+    filled.contour(volcano,col=newcolVec)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

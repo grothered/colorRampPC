@@ -188,16 +188,17 @@ resample_colorVec<-function(colVec, breaks, n=NULL,
     # colors, and return_function=TRUE, then return a function from the range of breaks into the colorspace
     #
     if(class(colVec)!='function'){
-        if(length(colVec)!=length(breaks)+1){
+        if((length(colVec)+1)!=length(breaks)){
             print('In resample_colorVec, if colVec is a vector of colors with length "q", then breaks must be of length "q+1"')
             print(paste0('The given lengths are instead', length(colVec), length(breaks)))
             stop('Incorrect inputs')
         }
-
+        browser()
         # Create a function which interpolates over colVec, and returns a character vector
         colVec2=col2rgb(colVec,alpha=T) # Extract r,g,b,alpha values from colors
-        colVec3=colorRamp(colVec2[,1:3]) # Make a color ramp function (but 'colorRamp' cannot treat alpha values, and returns rgb)
-        colVecfun=make_color_char_function(colVec3, colVec2[,4]) # colVec2[,4] = transparency values
+        colVec2p5=rgb(colVec2[1,], colVec2[2,],colVec2[3,],maxColorValue=255)
+        colVec3=colorRamp(colVec2p5) # Make a color ramp function (but 'colorRamp' cannot treat alpha values, and returns rgb)
+        colVecfun=make_color_char_function(colVec3, colVec2[4,]) # colVec2[4,] = transparency values
     }else{
         colVecfun=colVec
     }
