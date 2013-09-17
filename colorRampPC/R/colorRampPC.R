@@ -28,14 +28,15 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255, ... ){
         myramp=read.table(paste0(ramps_dir,'/',ramp),skip=1)
 
         # Interpolate 'alpha' transparency values if needed
-        if(length(alpha)!=1){
-            alpha2=approx(seq(0,1,len=length(alpha)), alpha,
-                          xout=seq(0,1,len=length(myramp[,1])))$y
-        }else{
-            alpha2=alpha
-        }
+        #if(length(alpha)!=1){
+        #    alpha2=approx(seq(0,1,len=length(alpha)), alpha,
+        #                  xout=seq(0,1,len=length(myramp[,1])))$y
+        #}else{
+        #    alpha2=alpha
+        #}
     
-        mycols=rgb(myramp[,1], myramp[,2], myramp[,3],alpha2, maxColorValue=255)
+        #mycols=rgb(myramp[,1], myramp[,2], myramp[,3],alpha2, maxColorValue=255)
+        mycols=rgb(myramp[,1], myramp[,2], myramp[,3], maxColorValue=255)
 
         outramp=colorRamp(mycols, ...)
        
