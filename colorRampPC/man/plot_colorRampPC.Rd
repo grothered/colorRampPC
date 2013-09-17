@@ -1,5 +1,6 @@
 \name{plot_colorRampPC}
 \alias{plot_colorRampPC}
+\alias{plot_colorVec}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
     Plot a color ramp. 
@@ -9,11 +10,15 @@
 }
 \usage{
     plot_colorRampPC(colramps = "", n=300, ...)
+    plot_colorVec(colvec)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{colramps}{
-    Name of color ramp. Call colorRampPC() to see all available ramps
+    Name of color ramp from the colorRampPC package. Use colorRampPC() to see all available ramps
+}
+  \item{colvec}{
+    Vector of named colors
 }
   \item{n}{
     Number of colors to use

@@ -17,9 +17,9 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ...
     #        invert = invert colors (255 - col)
     #        ... = further arguments to colorRamp
     #
-    # OUTPUT: (if is.null(n)) Function interpolating colors from ramp, domain [0,1]. 
+    # OUTPUT: (if is.null(n)) Return a function interpolating colors from ramp, domain [0,1]. 
     #                         Colors are reported as characters
-    #         If (!is.null(n)), then return n colors along the ramp instead
+    #         If (!is.null(n)), then Return n colors along the ramp instead (as character vectors)
     #       
     #
     if(ramp==""){
@@ -49,20 +49,12 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ...
         #mycols=rgb(myramp[,1], myramp[,2], myramp[,3],alpha2, maxColorValue=255)
         mycols=rgb(myramp[,1], myramp[,2], myramp[,3], maxColorValue=255)
 
+        # colorRamp will not treat 'alpha' values
         outramp=colorRamp(mycols, ...)
-       
-        # Create function of x (vector in [0,1])
-        outramp2<-function(x){
-            myrgb=outramp(x)
-            if(length(alpha)!=1){
-                alpha3=approx(seq(0,1,len=length(alpha)), alpha,
-                          xout=seq(0,1,len=length(myrgb[,1])))$y
-            }else{
-                alpha3=alpha
-            }
-            return(rgb(myrgb[,1],myrgb[,2],myrgb[,3],alpha3,maxColorValue=255))
-        }
-
+     
+        # Make a function for interpolating colors which treats alpha values 
+        outramp2=make_color_char_function(outramp, alpha)
+ 
         # If n!=NULL, return vector of 'n' colors
         if(!is.null(n)){
             if(n>0 & round(n)==n){
@@ -83,6 +75,30 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ...
 }
 
 ########################################################################################
+
+make_color_char_function<-function(outramp,alpha){
+    # outramp is a function created by 'grDevices::colorRamp'
+    # alpha is a vector or scalar of transparency values in [0,255]
+    # Return a function like 'outramp' which accounts for transparency,
+    # and which returns character values rather than rgb values
+
+    # Create function of x (vector in [0,1])
+    outramp2<-function(x){
+        myrgb=outramp(x)
+        if(length(alpha)!=1){
+            # Approximate 'length(x)' points along alpha
+            alpha3=approx(seq(0,1,len=length(alpha)), alpha,
+                      xout=seq(0,1,len=length(x)))$y
+        }else{
+            alpha3=alpha
+        }
+        return(rgb(myrgb[,1],myrgb[,2],myrgb[,3],alpha3,maxColorValue=255))
+    }
+    # Return the function
+    return(outramp2)
+}
+
+####################################################################################
 
 breaks4image<-function(mycolRamp, inputdata, type='equal-area',
                        minval=NULL,maxval=NULL,power=0.5,
@@ -145,19 +161,69 @@ plot_colorRampPC<-function(colramps="", n=300, ...){
 
     for(mycolramp in colramps){
         mycol=colorRampPC(mycolramp,n, ...)
-        plot_colorRamp(mycol, mycolramp)
+        plot_colorVec(mycol)
+        title(mycolramp,line=0,col='white')
     }
 }
 
 #################################################################################
-plot_colorRamp<-function(mycol, mycolramp=""){
+plot_colorVec<-function(colvec){
     # Plot a vector of colors as a bar plot
-    n=length(mycol)
+    n=length(colvec)
     xleft=seq(0,1,len=n+1)[1:n]
     xright=seq(0,1,len=n+1)[2:(n+1)]
     ybottom=rep(0,length(xleft))
     ytop=rep(1,length(xleft))
     plot(c(0,1),c(0,1),col=0, axes=FALSE,ann=FALSE)
-    rect(xleft,ybottom,xright,ytop,col=mycol,border=NA)
-    title(mycolramp,line=0,col='white')
+    rect(xleft,ybottom,xright,ytop,col=colvec,border=NA)
+}
+
+#################################################################################
+resample_colorVec<-function(colVec, breaks, n=NULL,
+                               return_function=(class(colVec)=='function' & is.null(n))){
+    # Spread 'colVec' over 'breaks'
+    # If n is an integer, return that many colors
+    # If n=NULL, and colVec is a vector, then return a vector of length colVec
+    # If colVec is a function from [0-1] returning a character vector of
+    # colors, and return_function=TRUE, then return a function from the range of breaks into the colorspace
+    #
+    if(class(colVec)!='function'){
+        if(length(colVec)!=length(breaks)+1){
+            print('In resample_colorVec, if colVec is a vector of colors with length "q", then breaks must be of length "q+1"')
+            print(paste0('The given lengths are instead', length(colVec), length(breaks)))
+            stop('Incorrect inputs')
+        }
+
+        # Create a function which interpolates over colVec, and returns a character vector
+        colVec2=col2rgb(colVec,alpha=T) # Extract r,g,b,alpha values from colors
+        colVec3=colorRamp(colVec2[,1:3]) # Make a color ramp function (but 'colorRamp' cannot treat alpha values, and returns rgb)
+        colVecfun=make_color_char_function(colVec3, colVec2[,4]) # colVec2[,4] = transparency values
+    }else{
+        colVecfun=colVec
+    }
+
+    # Make a function to go from breaks to 0-1
+
+    breaks_to_unit_interval=approxfun(breaks,seq(0,1,len=length(breaks)))
+   
+    outputfun<-function(x){
+        # Make function which returns colors given inputs along 'breaks'
+        x_on_unit_interval=breaks_to_unit_interval(x)
+        output_cols=colVecfun(x_on_unit_interval)
+        return(output_cols)    
+    }
+
+    if(return_function){
+        return(outputfun) 
+    }else{
+        if(is.null(n)){
+            if(class(colVec=='function')){
+                 stop('Must supply n (number of colors) for resample_colorRampPC when colVec is a function and return_function==FALSE')
+            }
+            # Assume we want 'length(colVec)' colors
+            n = length(colVec)
+        }
+        outputcols=outputfun(seq(0,1,len=n))
+        return(outputcols)
+    }
 }

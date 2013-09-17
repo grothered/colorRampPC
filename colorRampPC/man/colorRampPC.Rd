@@ -61,19 +61,19 @@
     myramp
     mycols=colorRampPC(myramp,n=10)
     mycols
-    plot_colorRamp(mycols)
+    plot_colorVec(mycols)
     title('Basic color ramp')
     # Ramp with variable transparency
     mycols=colorRampPC(myramp,n=10, alpha=c(0,100, 255, 0))
     mycols
-    plot_colorRamp(mycols)
+    plot_colorVec(mycols)
     title('Basic color ramp with variable transparency')
     # Return a function instead, and still use transparency, and use other
     # arguments from colorRamp
     mycolsFun=colorRampPC(myramp,alpha=c(0,100,255,255,100,0), 
                           bias=0.5,space='Lab', interpolate='spline')
     mycolsFun(c(0,0.5,1.0))
-    plot_colorRamp(mycolsFun(seq(0,1,len=100)))
+    plot_colorVec(mycolsFun(seq(0,1,len=100)))
     title('Basic color ramp with variable transparency,\n output as a function')
 
     ########### APPLICATION EXAMPLE #########    
