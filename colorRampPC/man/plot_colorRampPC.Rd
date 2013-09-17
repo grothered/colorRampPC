@@ -8,12 +8,18 @@
     Plot a color ramp. Mainly used to inspect/choose ramps for use elsewhere
 }
 \usage{
-    plot_colorRampPC(colramps = "")
+    plot_colorRampPC(colramps = "", n=300, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{colramps}{
     Name of color ramp. Call colorRampPC() to see all available ramps
+}
+  \item{n}{
+    Number of colors to use
+}
+  \item{...}{
+    Further arguments to colorRampPC
 }
 }
 \details{

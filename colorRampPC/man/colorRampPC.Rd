@@ -8,7 +8,7 @@
     Access various pre-canned colorRamps FIXME
 }
 \usage{
-    colorRampPC(ramp = "", n = NULL, alpha = 255, ...)
+    colorRampPC(ramp = "", n = NULL, alpha = 255, reverse=FALSE, invert=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +22,12 @@
   \item{alpha}{
     Vector of transparancy values (in [0-255]). This can be of any length, and will be linearly interpolated
     along the color ramp.
+}
+  \item{reverse}{
+    Logical: Reverse color order
+}
+  \item{invert}{
+    Logical: Invert colors (rgb --> 255 - rgb)
 }
   \item{\dots}{
     Any other argument to the colorRamp function
@@ -83,6 +89,14 @@
     # Plot all color ramps
     par(mar=c(0,0,1,0))
     plot_colorRampPC()
+
+    # Plot the reversed color ramps
+    par(mar=c(0,0,1,0))
+    plot_colorRampPC(reverse=TRUE)
+   
+    # Plot inverted color ramps 
+    par(mar=c(0,0,1,0))
+    plot_colorRampPC(invert=TRUE)
 
     # Loop over all color schemes, and plot volcano data
     par(mar=c(0,0,0,0)+0.2)

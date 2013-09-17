@@ -4,7 +4,7 @@ ramps_dir=paste0(system.file(package='colorRampPC'), '/extdata')
 all_ramps=dir(ramps_dir, pattern='.tbl')
 
 ##########################################################################################
-colorRampPC<-function(ramp="", n=NULL, alpha=255, ... ){
+colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ... ){
     # Read a "Pre-Canned" color ramp (name='ramp'), 
     # and return a function (output of 'colorRamp')
     # which interpolates among these colors, or n colors
@@ -13,6 +13,8 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255, ... ){
     #               If ramp="", then print a vector of available color ramps
     #        alpha = vector of transparency values,which will be interpolated along the color ramp
     #        n = number of colours. If n=NULL, return 'colorRamp' function       
+    #        reverse = switch order of colors
+    #        invert = invert colors (255 - col)
     #        ... = further arguments to colorRamp
     #
     # OUTPUT: (if is.null(n)) Function interpolating colors from ramp, domain [0,1]. 
@@ -26,6 +28,15 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255, ... ){
     }else if(ramp%in%all_ramps){
         # Read in ramp
         myramp=read.table(paste0(ramps_dir,'/',ramp),skip=1)
+
+        if(reverse){
+            l = dim(myramp)[1]
+            myramp=myramp[l:1,]
+        }
+
+        if(invert){
+            myramp = 255 - myramp
+        }
 
         # Interpolate 'alpha' transparency values if needed
         #if(length(alpha)!=1){
@@ -126,14 +137,14 @@ breaks4image<-function(mycolRamp, inputdata, type='equal-area',
 
 ##################################################################################
 
-plot_colorRampPC<-function(colramps=""){
+plot_colorRampPC<-function(colramps="", n=300, ...){
     # Make a barplot of the colorRamp
     if(is.na(colramps)) stop('colramps is NA')
 
     if(colramps=="") colramps=colorRampPC()
 
     for(mycolramp in colramps){
-        mycol=colorRampPC(mycolramp,n=300)
+        mycol=colorRampPC(mycolramp,n, ...)
         plot_colorRamp(mycol, mycolramp)
     }
 }
