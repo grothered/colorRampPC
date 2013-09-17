@@ -5,10 +5,12 @@
     Access various pre-canned colorRamps
 }
 \description{
-    Access various pre-canned colorRamps FIXME
+    Access various pre-canned colorRamps as either a character vector of
+    colors, or a function from [0-1] to the colors
 }
 \usage{
-    colorRampPC(ramp = "", n = NULL, alpha = 255, reverse=FALSE, invert=FALSE,...)
+    colorRampPC(ramp = "", n = NULL, alpha = 255, 
+                 reverse=FALSE, invert=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

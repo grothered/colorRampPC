@@ -24,9 +24,12 @@ to work with an evenly interpolated colorbar. See the example.
 
 }
 \usage{
-breaks4image(mycolRamp, inputdata, type = "equal-area", minval = NULL, maxval = NULL, power = 0.5, zeroval = 0, zerothresh = 1, ncell = 5e+05)
+breaks4image(mycolRamp, inputdata, type = "equal-area", 
+             minval = NULL, maxval = NULL, power = 0.5, 
+             zeroval = 0, zerothresh = 1, ncell = 5e+05)
 
-resample_colorVec(colVec, breaks, n=NULL, return_function=(class(colVec)=='function' & is.null(n)))
+resample_colorVec(colVec, breaks, n=NULL, 
+                  return_function=(class(colVec)=='function' & is.null(n)))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

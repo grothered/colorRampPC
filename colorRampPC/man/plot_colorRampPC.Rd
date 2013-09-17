@@ -10,7 +10,9 @@
 }
 \usage{
     plot_colorRampPC(colramps = "", n=300, ...)
-    plot_colorVec(colvec, xleft=0,xright=1,ybottom=0,ytop=1,vertical=FALSE, add=FALSE)
+    plot_colorVec(colvec, xleft=0,xright=1,
+                  ybottom=0,ytop=1,
+                  vertical=FALSE, add=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
