@@ -12,13 +12,15 @@ breaks4image can compute a vector of 'breaks' suitable for use in the 'image'
 function, with various methods to distribute colors (e.g. equal-area, linearly,
 ...). 
 
-This is designed to mimic some functionality of the QGIS 1-band raster plugin, which allows
-users to distribute colors to equalise the image area, or linearly, or by various transformations.
+This is designed to mimic some functionality of the QGIS 1-band raster plugin,
+which allows users to distribute colors to equalise the image area, or
+linearly, or by various transformations.
 
 resample_colorVec is something like 'approx' for colors: It takes a color bar
-defined by breaks,colVec, and linearly interpolates along these to return 'n'
-output colors, or alternatively, to return a function which does the
-interpolation
+defined by breaks,colVec, [with length(breaks)=length(colvec)+1] and evenly
+interpolates along breaks these to return 'n' output colors, or alternatively,
+to return a function which does the interpolation. In some cases, it is easier
+to work with an evenly interpolated colorbar. See the example.
 
 }
 \usage{
