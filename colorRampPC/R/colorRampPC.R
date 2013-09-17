@@ -193,7 +193,7 @@ resample_colorVec<-function(colVec, breaks, n=NULL,
             print(paste0('The given lengths are instead', length(colVec), length(breaks)))
             stop('Incorrect inputs')
         }
-        browser()
+        #browser()
         # Create a function which interpolates over colVec, and returns a character vector
         colVec2=col2rgb(colVec,alpha=T) # Extract r,g,b,alpha values from colors
         colVec2p5=rgb(colVec2[1,], colVec2[2,],colVec2[3,],maxColorValue=255)
@@ -224,7 +224,7 @@ resample_colorVec<-function(colVec, breaks, n=NULL,
             # Assume we want 'length(colVec)' colors
             n = length(colVec)
         }
-        outputcols=outputfun(seq(0,1,len=n))
+        outputcols=outputfun(seq(min(breaks),max(breaks),len=n))
         return(outputcols)
     }
 }

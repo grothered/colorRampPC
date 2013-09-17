@@ -91,7 +91,8 @@ resample_colorVec(colVec, breaks, n=NULL, return_function=(class(colVec)=='funct
 \examples{
 
     # Standard use of filled.contour 
-    mycolVec=terrain.colors(20)
+    devAskNewPage(TRUE)
+    mycolVec=terrain.colors(21)
     data(volcano)
     filled.contour(volcano,col=mycolVec, main='Standard approach')
 
@@ -100,8 +101,9 @@ resample_colorVec(colVec, breaks, n=NULL, return_function=(class(colVec)=='funct
     filled.contour(volcano, col=mycolVec,levels=newbreaks, main='Equal-area breaks')
 
     # How to compute colors to be linearly varying along the last colorbar?
-    newcolVec=resample_colorVec(mycolVec, newbreaks,n=100)
-    filled.contour(volcano,col=newcolVec)
+    newcolVec=resample_colorVec(mycolVec, newbreaks,n=30)
+    filled.contour(volcano,col=newcolVec, levels=seq(min(volcano), max(volcano), len=31), main='Resampled equal-area colors')
+    devAskNewPage(FALSE)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
