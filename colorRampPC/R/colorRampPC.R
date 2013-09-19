@@ -200,6 +200,8 @@ plot_colorVec<-function(colvec,
                         plotWidthScale=0.5,
                         plotHeightScale=1.0){
     # Plot a vector of colors as a bar plot
+    # Optionall add axes, with labels based on 'breaks', and adjust the scale
+
     n=length(colvec)
     if(!vertical){
         xl=seq(xleft,xright,len=n+1)[1:n]
@@ -225,11 +227,11 @@ plot_colorVec<-function(colvec,
             }
         }
         if(vertical){
-            axis(side=4,pos=0.3,las=2,at=seq(ybottom,ytop,len=5),
+            axis(side=4,pos=xright,las=2,at=seq(ybottom,ytop,len=5),
                  labels=signif(approx(seq(0,1,len=length(breaks)),
                  breaks, xout=seq(0,1,len=5))$y,3),las=2)
         }else{
-            axis(side=1,pos=0.3,las=2,at=seq(xleft,xright,len=5),
+            axis(side=1,pos=ybottom,las=2,at=seq(xleft,xright,len=5),
                  labels=signif(approx(seq(0,1,len=length(breaks)),
                  breaks, xout=seq(0,1,len=5))$y,3))
         }

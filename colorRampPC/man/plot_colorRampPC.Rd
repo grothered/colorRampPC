@@ -10,9 +10,14 @@
 }
 \usage{
     plot_colorRampPC(colramps = "", n=300, ...)
-    plot_colorVec(colvec, xleft=0,xright=1,
-                  ybottom=0,ytop=1,
-                  vertical=FALSE, add=FALSE)
+
+plot_colorVec(colvec,
+              xleft=0,xright=1,ybottom=0,ytop=1,
+              breaks=NULL,
+              vertical=FALSE, add=FALSE, 
+              add_axis=!add,
+              plotWidthScale=0.5,
+              plotHeightScale=1.0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,11 +33,24 @@
   \item{xleft, xright, ybottom, ytop}{
     Coordinates of box
 }
+  \item{breaks}{
+    Numeric vector of breaks defining the colorbar scale.
+    This will be interpolated from to define axis labels if add_axis=TRUE
+}
   \item{vertical}{
     Logical: Draw bars vertically?
 }
   \item{add}{
     Logical: Add to existing plot?
+}
+  \item{add_axis}{
+    Add a scale to the colorbar. Values will be interpolated from 'breaks' if
+    that is provided, otherwise they will be interpolated from ybottom-ytop if
+    vertical=TRUE, or from xleft-xright if vertical=FALSE 
+}
+  \item{plotWidthScale, plotHeightScale}{
+    If add=FALSE, these can be used to adjust the relative scale of the colorbar
+    compared with the plot axes
 }
   \item{...}{
     Further arguments to colorRampPC
