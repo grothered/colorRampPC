@@ -102,16 +102,31 @@ make_color_char_function<-function(outramp,alpha){
 
 breaks4image<-function(mycolRamp, inputdata, type='equal-area',
                        minval=NULL,maxval=NULL,power=0.5,
-                       zeroval=0,zerothresh=1, ncell=5e+05){
+                       log_one_val=minval, log_stretch_factor=1, 
+                       zerothresh=1, ncell=1e+04){
     # Make a 'breaks' argument for an image plot,
     # based on the input-data, and a choice of break types
 
     output= switch(type,
         'equal-area' = {
             if(class(inputdata)!='RasterLayer'){
-               quantile(inputdata,prob=seq(0,1,len=length(mycolRamp)+1))
+                quantile(inputdata,prob=seq(0,1,len=length(mycolRamp)+1))
             }else{
-               quantile(inputdata,prob=seq(0,1,len=length(mycolRamp)+1),ncells=ncell)
+                require(raster)
+                output = quantile(inputdata,prob=seq(0,1,len=length(mycolRamp)+1),ncells=ncell)
+
+                # Make sure min/max coincide with input values or raster values
+                if(!is.null(minval)){
+                    output[1] = minval
+                }else if(is.finite(inputdata@data@min)){
+                    output[1]=inputdata@data@min
+                }
+                if(!is.null(maxval)){
+                    output[length(output)] = maxval
+                }else if(is.finite(inputdata@data@max)){
+                    output[length(output)] = inputdata@data@max
+                }
+                output
             }
         },
         'linear'={
@@ -122,8 +137,8 @@ breaks4image<-function(mycolRamp, inputdata, type='equal-area',
             }else{
                 # Rasters have a different min/max function
                 require(raster)
-                if(is.null(minval)) minval=raster::minValue(inputdata,na.rm=T)
-                if(is.null(maxval)) maxval=raster::maxValue(inputdata,na.rm=T) 
+                if(is.null(minval)) minval=raster::minValue(inputdata)
+                if(is.null(maxval)) maxval=raster::maxValue(inputdata) 
             }
             seq(minval,maxval,len=length(mycolRamp)+1)
         },
@@ -135,10 +150,20 @@ breaks4image<-function(mycolRamp, inputdata, type='equal-area',
             }else{
                 require(raster)
                 # Rasters have a different min/max function
-                if(is.null(minval)) minval=raster::minValue(inputdata,na.rm=T)
-                if(is.null(maxval)) maxval=raster::maxValue(inputdata,na.rm=T) 
+                if(is.null(minval)) minval=raster::minValue(inputdata)
+                if(is.null(maxval)) maxval=raster::maxValue(inputdata) 
             }
 
+            if(is.null(log_one_val)) log_one_val=minval
+
+            if(!(log_one_val<maxval)){
+                stop('ERROR: For log-type breaks, log_one_val must be set as less than maxval')
+            }
+
+            log_seq=(10**seq(log10(1), log10(1+log_stretch_factor), len=length(mycolRamp)+1)-1)/(log_stretch_factor) 
+            breaks=log_one_val + (maxval-log_one_val)*log_seq
+
+            breaks
 
         },
         'power'={
@@ -167,7 +192,13 @@ plot_colorRampPC<-function(colramps="", n=300, ...){
 }
 
 #################################################################################
-plot_colorVec<-function(colvec, xleft=0,xright=1,ybottom=0,ytop=1,vertical=FALSE, add=FALSE){
+plot_colorVec<-function(colvec,
+                        xleft=0,xright=1,ybottom=0,ytop=1,
+                        breaks=NULL,
+                        vertical=FALSE, add=FALSE, 
+                        add_axis=!add,
+                        plotWidthScale=0.5,
+                        plotHeightScale=1.0){
     # Plot a vector of colors as a bar plot
     n=length(colvec)
     if(!vertical){
@@ -181,8 +212,28 @@ plot_colorVec<-function(colvec, xleft=0,xright=1,ybottom=0,ytop=1,vertical=FALSE
         ybt=seq(ybottom, ytop,len=n+1)[1:n]
         ytp=seq(ybottom, ytop,len=n+1)[2:(n+1)]
     }
-    if(add==FALSE) plot(c(xleft,xright),c(ybottom,ytop),col=0, axes=FALSE,ann=FALSE)
+    if(add==FALSE) plot(xleft+c(0,xright-xleft)/plotWidthScale,ybottom+c(0,ytop-ybottom)/plotHeightScale,col=0, axes=FALSE,ann=FALSE)
     rect(xl,ybt,xr,ytp,col=colvec,border=NA)
+
+    if(add_axis){
+        # Add an axis for the colorbar
+        if(is.null(breaks)){
+            if(vertical){
+                breaks=seq(ybottom,ytop,len=length(colvec)+1)
+            }else{
+                breaks=seq(ybottom,ytop,len=length(colvec)+1)
+            }
+        }
+        if(vertical){
+            axis(side=4,pos=0.3,las=2,at=seq(ybottom,ytop,len=5),
+                 labels=signif(approx(seq(0,1,len=length(breaks)),
+                 breaks, xout=seq(0,1,len=5))$y,3),las=2)
+        }else{
+            axis(side=1,pos=0.3,las=2,at=seq(xleft,xright,len=5),
+                 labels=signif(approx(seq(0,1,len=length(breaks)),
+                 breaks, xout=seq(0,1,len=5))$y,3))
+        }
+    }
 }
 
 #################################################################################
