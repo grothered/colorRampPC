@@ -81,7 +81,10 @@ resample_colorVec(colVec, breaks, n=NULL,
 }
 }
 \details{
-    Supported values of 'type' are 'equal_area' (so colors are evenly spread over inputdata), 'linear' (so colours are linear between minval and maxval)
+    Supported values of 'type' are 'equal_area' (so colors are evenly spread
+    over inputdata), 'linear' (so colours are linear between minval and maxval),
+    'log' (colors vary logarithmically from log_one_val to maxval, with a stretch
+    defined by log_stretch_val)
 }
 \value{
     A vector of 'breaks' with length = (length(mycolRamp)+1). This is suitable for use in "image" along with mycolRamp
