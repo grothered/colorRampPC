@@ -24,9 +24,10 @@ to work with an evenly interpolated colorbar. See the example.
 
 }
 \usage{
-breaks4image(mycolRamp, inputdata, type = "equal-area", 
-             minval = NULL, maxval = NULL, power = 0.5, 
-             zeroval = 0, zerothresh = 1, ncell = 5e+05)
+breaks4image(mycolRamp, inputdata, type='equal-area',
+             minval=NULL,maxval=NULL,power=0.5,
+             log_one_val=minval, log_stretch_factor=1, 
+             zerothresh=1, ncell=1e+04)
 
 resample_colorVec(colVec, breaks, n=NULL, 
                   return_function=(class(colVec)=='function' & is.null(n)))
@@ -51,11 +52,16 @@ resample_colorVec(colVec, breaks, n=NULL,
   \item{power}{
     TODO: Relates to power transformation
 }
-  \item{zeroval}{
-    TODO: Relates to log transformation
+  \item{log_one_val}{
+    Relates to log transformation -- colors will vary logarithmically between
+    log_one_val and maxval (or a computed maxval), with a stretch determined by 
+    log_stretch_factor
+}
+  \item{log_stretch_factor}{
+    Stretches out the breaks, in the case of log breaks
 }
   \item{zerothresh}{
-    TODO: Relates to log transformation
+    UNIMPLEMENTED: Relates to log transformation
 }
   \item{ncell}{
     If 'inputdata' is a RasterLayer, at most this many cells are used in 'quantile' computation
