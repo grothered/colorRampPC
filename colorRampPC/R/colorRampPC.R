@@ -3,6 +3,53 @@
 ramps_dir=paste0(system.file(package='colorRampPC'), '/extdata')
 all_ramps=dir(ramps_dir, pattern='.tbl',recursive=T)
 
+## This function was copied from the 'raster' package
+## by Robert J Hijmans.
+## (package version raster_2.1-49)
+extension<-function (filename, value = NULL, maxchar = 10) 
+{
+    if (!is.null(value)) {
+        extension(filename) <- value
+        return(filename)
+    }
+    lfn <- nchar(filename)
+    ext <- list()
+    for (f in 1:length(filename)) {
+        extstart <- -1
+        for (i in lfn[f]:2) {
+            if (substr(filename[f], i, i) == ".") {
+                extstart <- i
+                break
+            }
+        }
+        if (extstart > 0) {
+            ext[f] <- substr(filename[f], extstart, lfn[f])
+        }
+        else {
+            ext[f] <- ""
+        }
+    }
+    ext <- unlist(ext)
+    ext[nchar(ext) > maxchar] <- ""
+    return(ext)
+}
+
+###
+
+get_ramp<-function(ramp){
+    # Function to read a color ramp file.
+    # Allows us to treat different formats
+
+    switch(extension(ramp),
+           '.tbl'={
+                read.table(paste0(ramps_dir,'/',ramp),skip=1)
+            },
+            stop('ramp type not supported')
+          )
+
+}
+
+
 ##########################################################################################
 colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ... ){
     # Read a "Pre-Canned" color ramp (name='ramp'), 
@@ -27,7 +74,7 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ...
         return(all_ramps)
     }else if(ramp%in%all_ramps){
         # Read in ramp
-        myramp=read.table(paste0(ramps_dir,'/',ramp),skip=1)
+        myramp=get_ramp(ramp)
 
         if(reverse){
             l = dim(myramp)[1]
