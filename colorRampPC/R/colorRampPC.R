@@ -1,7 +1,7 @@
 ### Code to import pre-canned colorRamps
 #ramps_dir='../inst/extdata' 
 ramps_dir=paste0(system.file(package='colorRampPC'), '/extdata')
-all_ramps=dir(ramps_dir, pattern='.tbl')
+all_ramps=dir(ramps_dir, pattern='.tbl',recursive=T)
 
 ##########################################################################################
 colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ... ){
