@@ -1,13 +1,15 @@
 ### Code to import pre-canned colorRamps
 #ramps_dir='../inst/extdata' 
 ramps_dir=paste0(system.file(package='colorRampPC'), '/extdata')
-all_ramps=dir(ramps_dir, pattern='.tbl',recursive=T)
+all_ramps=c(dir(ramps_dir, pattern='\\.tbl',recursive=T), 
+            dir(ramps_dir,pattern='\\.cpt',recursive=T))
 
 ## This function was copied from the 'raster' package
 ## by Robert J Hijmans.
 ## (package version raster_2.1-49)
 extension<-function (filename, value = NULL, maxchar = 10) 
 {
+    # Find the file extension
     if (!is.null(value)) {
         extension(filename) <- value
         return(filename)
@@ -36,6 +38,44 @@ extension<-function (filename, value = NULL, maxchar = 10)
 
 ###
 
+cpt2rgb<-function(cptTxt){
+    # Convert cpt text to rgb
+
+    # Tread rare file formats
+    cptTxt=gsub('\t', ' ', cptTxt)
+
+    
+    start_col=grep('COLOR_MODEL', cptTxt)+1
+    # Treat rare color model cases
+    if(length(start_col)==0) start_col=grep('COLOR MODEL', cptTxt)+1
+    if(length(start_col)==0) start_col=max(grep('#',cptTxt))+1
+
+    # 
+    tmp=grep('^[A-Z]', cptTxt)
+    if(length(tmp)>0){
+        end_col=min(tmp)-1
+    }else{
+        end_col=length(cptTxt)
+    }
+   
+    # Remove occasional characters in color specification 
+    cptTxt[start_col:end_col]=gsub('[A-Z]', '', cptTxt[start_col:end_col])
+    cptlines=read.table(text=cptTxt[start_col:end_col]) 
+    
+    # Remove the 'elevation' lines
+    cptlines=matrix( c(t(as.matrix(cptlines[,c(2,3,4,6,7,8)]))), ncol=3,byrow=T)
+
+    # If the colors are HSV, convert to rgb before output
+    if(length(grep('HSV', cptTxt[start_col-1]))!=0){
+        tmpcol=hsv(cptlines[,1]/360, cptlines[,2]/360, cptlines[,3]/360)
+        cptlines=t(col2rgb(tmpcol))    
+    }
+
+    return(cptlines)
+}
+
+#####################################################
+
 get_ramp<-function(ramp){
     # Function to read a color ramp file.
     # Allows us to treat different formats
@@ -43,6 +83,14 @@ get_ramp<-function(ramp){
     switch(extension(ramp),
            '.tbl'={
                 read.table(paste0(ramps_dir,'/',ramp),skip=1)
+            },
+           '.cpt'={
+                mycpt=readLines(paste0(ramps_dir,'/',ramp))
+                output=try(cpt2rgb(mycpt))
+                # Catch various error cases
+                if(class(output)=='try-error') output=matrix(c(0,0,0),ncol=3,nrow=2)
+                if(ncol(output)!=3) output=matrix(c(0,0,0),ncol=3,nrow=2)
+                output
             },
             stop('ramp type not supported')
           )
