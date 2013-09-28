@@ -383,3 +383,21 @@ resample_colorVec<-function(colVec, breaks, n=NULL,
         return(outputcols)
     }
 }
+
+
+pdf_ramps<-function(pdfname='all_color_ramps.pdf'){
+    pdf(pdfname,width=7,height=5)
+    par(mfrow=c(24,6))
+    par(mar=c(0.0,0,1,0.0))
+    all_colorRamps=colorRampPC()
+    for(i in 1:length(all_colorRamps)){
+        #mycpt=readLines(distrib_cpts[i])
+        #rgbtmp=try(cpt2rgb(mycpt))
+        #if(class(rgbtmp)=='try-error') next
+        #mycols=rgb(rgbtmp[,1], rgbtmp[,2], rgbtmp[,3],maxColorValue=255)
+        mycols=colorRampPC(all_colorRamps[i],n=300)
+        plot_colorVec(mycols,plotWidthScale=0.9,add_axis=FALSE)
+        title(all_colorRamps[i],cex.main=0.5)
+    }
+    dev.off()
+}
