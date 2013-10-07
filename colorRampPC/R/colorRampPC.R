@@ -67,7 +67,11 @@ cpt2rgb<-function(cptTxt){
 
     # If the colors are HSV, convert to rgb before output
     if(length(grep('HSV', cptTxt[start_col-1]))!=0){
-        tmpcol=hsv(cptlines[,1]/360, cptlines[,2]/360, cptlines[,3]/360)
+        # Sometimes the scale is [0-1], othertimes [0-360]. Normalise
+        if(max(cptlines[,1])>1) cptlines[,1]=cptlines[,1]/360
+        if(max(cptlines[,2])>1) cptlines[,2]=cptlines[,2]/360
+        if(max(cptlines[,3])>1) cptlines[,3]=cptlines[,3]/360
+        tmpcol=hsv(cptlines[,1], cptlines[,2], cptlines[,3])
         cptlines=t(col2rgb(tmpcol))    
     }
 
