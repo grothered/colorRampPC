@@ -8,7 +8,8 @@
     Provides pre-canned color-ramps. 
 
     At the moment most color ramps from the QGIS 1-band-raster-colors plugin
-    are included. 
+    are included, along with the parts of cpt-city which are realeased under the
+    GPL
 
     Also provides functions for computing 'breaks' for plotting, which also
     mimics some aspects of the raster colors plugin in QGIS. 
