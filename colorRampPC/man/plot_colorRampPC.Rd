@@ -17,7 +17,8 @@ plot_colorVec(colvec,
               vertical=FALSE, add=FALSE, 
               add_axis=!add,
               plotWidthScale=0.5,
-              plotHeightScale=1.0)
+              plotHeightScale=1.0,
+              las=1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,6 +52,9 @@ plot_colorVec(colvec,
   \item{plotWidthScale, plotHeightScale}{
     If add=FALSE, these can be used to adjust the relative scale of the colorbar
     compared with the plot axes
+}
+\item{las}{
+    las parameter controlling colorRamp label orientation. See ?par for details on las
 }
   \item{...}{
     Further arguments to colorRampPC

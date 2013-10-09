@@ -285,7 +285,7 @@ plot_colorRampPC<-function(colramps="", n=300, ...){
 
     for(mycolramp in colramps){
         mycol=colorRampPC(mycolramp,n, ...)
-        plot_colorVec(mycol)
+        plot_colorVec(mycol,plotWidthScale=1.0,plotHeightScale=1.0)
         title(mycolramp,line=0,col='white')
     }
 }
@@ -297,7 +297,8 @@ plot_colorVec<-function(colvec,
                         vertical=FALSE, add=FALSE, 
                         add_axis=!add,
                         plotWidthScale=0.5,
-                        plotHeightScale=1.0){
+                        plotHeightScale=1.0,
+                        las=1){
     # Plot a vector of colors as a bar plot
     # Optionall add axes, with labels based on 'breaks', and adjust the scale
 
@@ -326,11 +327,11 @@ plot_colorVec<-function(colvec,
             }
         }
         if(vertical){
-            axis(side=4,pos=xright,las=2,at=seq(ybottom,ytop,len=5),
+            axis(side=4,pos=xright,at=seq(ybottom,ytop,len=5),
                  labels=signif(approx(seq(0,1,len=length(breaks)),
-                 breaks, xout=seq(0,1,len=5))$y,3),las=2)
+                 breaks, xout=seq(0,1,len=5))$y,3),las=las)
         }else{
-            axis(side=1,pos=ybottom,las=2,at=seq(xleft,xright,len=5),
+            axis(side=1,pos=ybottom,las=las,at=seq(xleft,xright,len=5),
                  labels=signif(approx(seq(0,1,len=length(breaks)),
                  breaks, xout=seq(0,1,len=5))$y,3))
         }
