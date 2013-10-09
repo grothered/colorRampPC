@@ -6,5 +6,5 @@ Date: 2013-09-15
 Author: Gareth Davies 
 Maintainer: Gareth Davies <grothered@gmail.com>
 Description: Provides pre-canned color ramps for plotting e.g. matrix/raster images. Also has utility functions to help work with them.
-License: GPLv3 
+License: GPL-v3 
 Suggests: raster
