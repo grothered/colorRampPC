@@ -89,13 +89,8 @@ resample_colorVec(colVec, breaks, n=NULL,
 \value{
     A vector of 'breaks' with length = (length(mycolRamp)+1). This is suitable for use in "image" along with mycolRamp
 }
-\references{
-}
 \author{
     Gareth Davies
-}
-\note{
-    
 }
 
 
@@ -122,4 +117,3 @@ resample_colorVec(colVec, breaks, n=NULL,
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ colors }

@@ -35,24 +35,11 @@
     Any other argument to the colorRamp function
 }
 }
-\details{
-    FIXME
-}
 \value{
     A vector of colors (if n!=NULL), or a function which computes these from inputs in [0,1]
 }
-\references{
-    NA
-}
 \author{
     Gareth Davies
-}
-\note{
-    None
-}
-
-\seealso{
-    colorRamp
 }
 \examples{
     # List all color ramps
@@ -121,5 +108,3 @@
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

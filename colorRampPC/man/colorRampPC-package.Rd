@@ -23,24 +23,11 @@ Package: \tab colorRampPC\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
 Date: \tab 2013-09-15\cr
-License: \tab GPL-v3 \cr
+License: \tab GPL-3 \cr
 }
-INSERT EXAMPLE HERE GARETH
 }
 \author{
 Gareth Davies
 
 Maintainer: Gareth Davies <grothered@gmail.com>
-}
-\references{
-    None
-}
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-    # See ?colorRampPC
-
 }
