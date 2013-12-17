@@ -2,7 +2,7 @@
 \alias{colorRampPC-package}
 \docType{package}
 \title{
-    Provides pre-canned color-ramps, and functions for computing 'breaks' for plotting 
+    Provides GPL friendly pre-canned color-ramps, and functions for computing 'breaks' for plotting 
 }
 \description{
     Provides pre-canned color-ramps. 

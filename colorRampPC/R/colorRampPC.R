@@ -173,6 +173,10 @@ colorRampPC<-function(ramp="", n=NULL, alpha=255,reverse=FALSE,invert=FALSE, ...
     }     
 }
 
+name_all_colorRamps<-function(){
+    # alias of colorRampPC() -- to get names of ramps
+    return(colorRampPC())
+}
 ########################################################################################
 
 make_color_char_function<-function(outramp,alpha){
@@ -279,9 +283,9 @@ breaks4image<-function(mycolRamp, inputdata, type='equal-area',
 
 plot_colorRampPC<-function(colramps="", n=300, ...){
     # Make a barplot of the colorRamp
-    if(is.na(colramps)) stop('colramps is NA')
+    if(any(is.na(colramps))) stop('colramps is NA')
 
-    if(colramps=="") colramps=colorRampPC()
+    if(length(colramps)==1 && colramps=="") colramps=colorRampPC()
 
     for(mycolramp in colramps){
         mycol=colorRampPC(mycolramp,n, ...)

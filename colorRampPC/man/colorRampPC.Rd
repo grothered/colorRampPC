@@ -1,5 +1,6 @@
 \name{colorRampPC}
 \alias{colorRampPC}
+\alias{name_all_colorRamps}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
     Access various pre-canned colorRamps
@@ -7,10 +8,17 @@
 \description{
     Access various pre-canned colorRamps as either a character vector of
     colors, or a function from [0-1] to the colors
+
+    The names of the ramps can be found by calling colorRampPC without arguments, 
+    or with the alias name_all_colorRamps()
+
+    The ramps were sourced from (the GPL parts of) cpt-city, and from the QGIS 1-band Raster Colors plugin (developed by bccConsulting).
 }
 \usage{
     colorRampPC(ramp = "", n = NULL, alpha = 255, 
                  reverse=FALSE, invert=FALSE,...)
+
+    name_all_colorRamps()
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -37,6 +45,8 @@
 }
 \value{
     A vector of colors (if n!=NULL), or a function which computes these from inputs in [0,1]
+    
+    name_all_colorRamps() and colorRampPC() return a character vector with the names of all available ramps. 
 }
 \author{
     Gareth Davies
@@ -70,41 +80,63 @@
     # Nice example
     data(volcano)
 
+    v=round(seq(1,length(allRamps),len=9))
+
     # Set up plot
     mar_old=par('mar')
-    par(mfrow=c(4,4))
+    par(mfrow=c(3,3))
     devAskNewPage(ask=TRUE)
     
     # Plot all color ramps
-    par(mar=c(0,0,1,0))
-    plot_colorRampPC()
+    par(oma=c(0,0,2,0))
+    par(mar=c(1,1,2,1))
+    plot_colorRampPC(allRamps[v])
+    title('Some Color Ramps', outer=TRUE)
 
     # Plot the reversed color ramps
-    par(mar=c(0,0,1,0))
-    plot_colorRampPC(reverse=TRUE)
+    #par(mar=c(0,0,1,0))
+    par(oma=c(0,0,2,0))
+    par(mar=c(1,1,2,1))
+    plot_colorRampPC(allRamps[v],reverse=TRUE)
+    title('Reversed Ramps', outer=TRUE)
    
     # Plot inverted color ramps 
-    par(mar=c(0,0,1,0))
-    plot_colorRampPC(invert=TRUE)
+    #par(mar=c(0,0,1,0))
+    par(oma=c(0,0,2,0))
+    par(mar=c(1,1,2,1))
+    plot_colorRampPC(allRamps[v],invert=TRUE)
+    title('Inverted Ramps', outer=TRUE)
 
     # Loop over all color schemes, and plot volcano data
-    par(mar=c(0,0,0,0)+0.2)
-    for(i in 1:length(colorRampPC())){
-        colpal=colorRampPC()[i]
+    #par(mar=c(0,0,0,0)+0.2)
+    for(i in 1:length(v[1:3])){
+        colpal=allRamps[v][i] #colorRampPC()[i]
         # Equal area colors
         mycolpal=colorRampPC(colpal,n=100)
         mycolbreaks=breaks4image(mycolpal,volcano,type='equal-area')
         image(volcano, col=mycolpal,breaks=mycolbreaks,axes=FALSE)
-        title(paste(colpal, '\n equal-area'),line=-2, col.main='white')    
+        #title(paste(colpal, '\n equal-area'),line=-2, col.main='white')    
+        title(paste(colpal, '\n equal-area'))    
+
         # Linear colors
         mycolbreaks=breaks4image(mycolpal,volcano,type='linear')
         image(volcano, col=mycolpal,breaks=mycolbreaks,axes=FALSE)
-        title(paste(colpal, '\n linear'),line=-2, col.main='white')    
+        #title(paste(colpal, '\n linear'),line=-2, col.main='white')    
+        title(paste(colpal, '\n linear'))    
+        
+        mycolbreaks=breaks4image(mycolpal,volcano,type='log',log_stretch_factor=1.)
+        image(volcano, col=mycolpal,breaks=mycolbreaks,axes=FALSE)
+        #title(paste(colpal, '\n log'),line=-2, col.main='white')    
+        title(paste(colpal, '\n log'))    
 
     }
 
+    # plots of them all
+    par(mfrow=c(3,3))
+    plot_colorRampPC()
 
     par(mar=mar_old)
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
