@@ -1,1 +1,6 @@
-exportPattern("^[[:alpha:]]+")
+export(colorRampPC)
+export(breaks4image)
+export(plot_colorRampPC)
+export(plot_colorVec)
+export(resample_colorVec)
+export(pdf_ramps)
