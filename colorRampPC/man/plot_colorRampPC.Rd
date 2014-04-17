@@ -12,7 +12,7 @@
 \usage{
 plot_colorVec(colvec,
               xleft=0,xright=1,ybottom=0,ytop=1,
-              breaks=NULL,
+              breaks=NULL, labels=NULL,
               vertical=FALSE, add=FALSE, 
               add_axis=!add,
               plotWidthScale=0.5,
@@ -39,6 +39,9 @@ pdf_ramps(pdfname='all_color_ramps.pdf')
   \item{breaks}{
     Numeric vector of breaks defining the colorbar scale.
     This will be interpolated from to define axis labels if add_axis=TRUE
+}
+  \item{labels}{
+    Numeric vector with labels to go on the colorbar axis
 }
   \item{vertical}{
     Logical: Draw bars vertically?

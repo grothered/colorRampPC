@@ -297,7 +297,7 @@ plot_colorRampPC<-function(colramps="", n=300, ...){
 #################################################################################
 plot_colorVec<-function(colvec,
                         xleft=0,xright=1,ybottom=0,ytop=1,
-                        breaks=NULL,
+                        breaks=NULL, labels=NULL,
                         vertical=FALSE, add=FALSE, 
                         add_axis=!add,
                         plotWidthScale=0.5,
@@ -318,7 +318,11 @@ plot_colorVec<-function(colvec,
         ybt=seq(ybottom, ytop,len=n+1)[1:n]
         ytp=seq(ybottom, ytop,len=n+1)[2:(n+1)]
     }
-    if(add==FALSE) plot(xleft+c(0,xright-xleft)/plotWidthScale,ybottom+c(0,ytop-ybottom)/plotHeightScale,col=0, axes=FALSE,ann=FALSE)
+    if(add==FALSE){
+        plot(xleft+c(0,xright-xleft)/plotWidthScale,
+             ybottom+c(0,ytop-ybottom)/plotHeightScale,
+             col=0, axes=FALSE,ann=FALSE)
+    }
     rect(xl,ybt,xr,ytp,col=colvec,border=NA)
 
     if(add_axis){
@@ -330,14 +334,21 @@ plot_colorVec<-function(colvec,
                 breaks=seq(ybottom,ytop,len=length(colvec)+1)
             }
         }
+
+        if(is.null(labels)) labels=pretty(breaks)
+
         if(vertical){
-            axis(side=4,pos=xright,at=seq(ybottom,ytop,len=5),
-                 labels=signif(approx(seq(0,1,len=length(breaks)),
-                 breaks, xout=seq(0,1,len=5))$y,3),las=las)
+            #axis(side=4,pos=xright,at=seq(ybottom,ytop,len=5),
+            #     labels=signif(approx(seq(0,1,len=length(breaks)),
+            #     breaks, xout=seq(0,1,len=5))$y,3),las=las)
+            axis(side=4,pos=xright,
+                 at=approx(breaks,seq(ybottom,ytop,len=length(breaks)),xout=labels)$y,
+                 labels=labels, #signif(approx(seq(0,1,len=length(breaks)),
+                 las=las)
         }else{
-            axis(side=1,pos=ybottom,las=las,at=seq(xleft,xright,len=5),
-                 labels=signif(approx(seq(0,1,len=length(breaks)),
-                 breaks, xout=seq(0,1,len=5))$y,3))
+            axis(side=1,pos=ybottom,las=las,
+                 at=approx(breaks, seq(xleft,xright,len=length(breaks)),xout=labels)$y,
+                 labels=labels)
         }
     }
 }
