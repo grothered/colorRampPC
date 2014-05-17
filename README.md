@@ -6,7 +6,6 @@ R package providing a range of 'Pre-Canned' color ramps. Presently it has those 
 
 If you have devtools installed, then you can use the following to install from hgithub
 
-----------------------------------------------------------------
-library(devtools)
-install_github('colorRampPC', 'grothered', subdir='colorRampPC')
-----------------------------------------------------------------
+    library(devtools)
+
+    install_github('colorRampPC', 'grothered', subdir='colorRampPC')
